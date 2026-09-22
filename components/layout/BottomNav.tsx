@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Home, Gamepad2, BarChart3, Settings } from "lucide-react";
+import { BarChart3, Gamepad2, Home, Settings } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const items = [
@@ -13,20 +13,17 @@ const items = [
 
 export function BottomNav() {
   const pathname = usePathname();
-  const isGame = pathname.startsWith("/games/") && pathname !== "/games";
-  if (isGame) return null;
+  if (pathname.startsWith("/games/") && pathname !== "/games") return null;
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 border-t bg-[color:var(--surface)]/94 px-3 pt-2 backdrop-blur-xl lg:hidden safe-bottom" style={{borderColor:"var(--border)"}}>
+    <nav className="fixed inset-x-0 bottom-0 z-50 border-t bg-[color:var(--surface)]/96 px-3 pt-2 backdrop-blur-xl lg:hidden safe-bottom" style={{borderColor:"var(--border)"}}>
       <div className="mx-auto grid max-w-md grid-cols-4 gap-1">
-        {items.map(({ href, label, icon: Icon }) => {
-          const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-          return (
-            <Link key={href} href={href} className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl text-[11px] font-semibold transition ${active ? "bg-siam-50 text-siam-600 dark:bg-siam-500/15 dark:text-sky-300" : "text-muted"}`}>
-              <Icon size={19} strokeWidth={active ? 2.5 : 2} />
-              <span>{label}</span>
-            </Link>
-          );
+        {items.map(({href,label,icon:Icon})=>{
+          const active=href==="/"?pathname==="/":pathname.startsWith(href);
+          return <Link key={href} href={href} className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-[14px] text-[11px] font-semibold transition ${active?"bg-[color:var(--surface-3)] text-siam-600":"text-muted"}`}>
+            <Icon size={19} strokeWidth={active?2.6:2}/>
+            <span>{label}</span>
+          </Link>;
         })}
       </div>
     </nav>
