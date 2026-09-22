@@ -1,17 +1,20 @@
 import Link from "next/link";
 import { ArrowRight, Smartphone, ShieldCheck, Zap, Gift, Gamepad2 } from "lucide-react";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { activeGames } from "@/data/games";
+import { GameCard } from "@/components/games/GameCard";
 
 const categories = ["ทั้งหมด", "เล่นเร็ว", "ความเร็ว", "ฝึกสมอง", "เกมปริศนา", "คลาสสิก"];
 
 export default function HomePage() {
+  const featured = activeGames.filter((game) => game.featured);
+
   return (
     <div className="space-y-8">
       <section className="overflow-hidden rounded-[2rem] bg-siam-900 p-6 text-white shadow-soft sm:p-9">
         <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-xs font-bold"><Gamepad2 size={15} /> สยามเพลย์ V1.0</span>
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-xs font-bold"><Gamepad2 size={15} /> สยามเพลย์ V1.1</span>
           <h1 className="mt-5 text-4xl font-black leading-tight sm:text-5xl">เล่นสนุกได้ทุกที่<br/><span className="text-gold">ฟรีทุกเกม</span></h1>
-          <p className="mt-4 max-w-xl text-sm leading-7 text-white/75 sm:text-base">เว็บไซต์รวมมินิเกมสำหรับคนไทย เปิดแล้วเล่นได้ทันที ไม่ต้องสมัครสมาชิก และออกแบบให้ใช้งานบนมือถือได้เต็มรูปแบบ</p>
+          <p className="mt-4 max-w-xl text-sm leading-7 text-white/75 sm:text-base">มินิเกมสำหรับคนไทย เล่นบนเว็บไซต์ได้ทันที ไม่ต้องสมัครสมาชิก และบันทึกสถิติไว้ในเครื่องของคุณ</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/games" className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-black text-siam-900">ดูเกมทั้งหมด <ArrowRight size={17}/></Link>
             <Link href="/games?random=1" className="inline-flex min-h-12 items-center rounded-2xl border border-white/20 px-5 py-3 text-sm font-bold">สุ่มเกมให้ฉัน</Link>
@@ -42,10 +45,12 @@ export default function HomePage() {
 
       <section>
         <div className="mb-4 flex items-end justify-between gap-4">
-          <div><p className="text-xs font-black uppercase tracking-[.2em] text-siam-500">เกมแนะนำ</p><h2 className="mt-1 text-2xl font-black text-siam-900">เตรียมพบกับเกมแรก</h2></div>
+          <div><p className="text-xs font-black uppercase tracking-[.2em] text-siam-500">เกมแนะนำ</p><h2 className="mt-1 text-2xl font-black text-siam-900">เริ่มเล่นเกมแรกของ SiamPlay</h2></div>
           <Link href="/games" className="text-sm font-bold text-siam-600">ดูทั้งหมด</Link>
         </div>
-        <EmptyState title="เกมกำลังเดินทางมา" description="SiamPlay V1.0 เป็นเวอร์ชันวางรากฐานเว็บไซต์ เกมแรกจะถูกเพิ่มในเวอร์ชันถัดไป" />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((game) => <GameCard key={game.id} game={game} />)}
+        </div>
       </section>
     </div>
   );
