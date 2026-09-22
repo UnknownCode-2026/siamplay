@@ -1,12 +1,17 @@
 "use client";
 
-import { Search, Shuffle } from "lucide-react";
+import { Brain, Clock3, Gamepad2, Search, Shuffle, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { GameDefinition } from "@/types/game";
 import { GameCard } from "@/components/games/GameCard";
 
-const categories = ["ทั้งหมด", "เล่นเร็ว", "ความเร็ว", "ฝึกสมอง", "เกมปริศนา", "คลาสสิก"];
+const categories = [
+  ["ทั้งหมด", Gamepad2],
+  ["เล่นเร็ว", Clock3],
+  ["ความเร็ว", Sparkles],
+  ["ฝึกสมอง", Brain],
+];
 
 export function GamesBrowser({ games, randomMode = false }: { games: GameDefinition[]; randomMode?: boolean }) {
   const [query, setQuery] = useState("");
@@ -24,29 +29,41 @@ export function GamesBrowser({ games, randomMode = false }: { games: GameDefinit
 
   function randomGame() {
     if (!games.length) return;
-    const game = games[Math.floor(Math.random() * games.length)];
-    router.push(game.route);
+    router.push(games[Math.floor(Math.random() * games.length)].route);
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
+      <label className="flex min-h-14 items-center gap-3 rounded-[1.4rem] border surface px-4 shadow-soft">
+        <Search size={19} className="text-muted" />
+        <input value={query} onChange={(e) => setQuery(e.target.value)} className="w-full bg-transparent text-sm font-semibold text-main outline-none placeholder:text-muted" placeholder="ค้นหาเกมที่อยากเล่น..." />
+        <button type="button" onClick={randomGame} aria-label="สุ่มเกม" className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-siam-600 text-white"><Shuffle size={18}/></button>
+      </label>
+
       {randomMode && (
-        <button onClick={randomGame} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-siam-900 px-5 py-3 font-black text-white sm:w-auto">
-          <Shuffle size={18}/> สุ่มเกมตอนนี้
+        <button onClick={randomGame} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-siam-600 to-cyan-400 px-5 py-3 font-black text-white shadow-soft">
+          <Shuffle size={18}/> สุ่มเกมให้ฉัน
         </button>
       )}
-      <label className="flex min-h-12 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 shadow-soft">
-        <Search size={19} className="text-slate-400" />
-        <input value={query} onChange={(e) => setQuery(e.target.value)} className="w-full bg-transparent text-sm outline-none" placeholder="ค้นหาเกม..." />
-      </label>
+
       <div className="flex gap-2 overflow-x-auto pb-1">
-        {categories.map((name) => (
-          <button key={name} onClick={() => setCategory(name)} className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold ${category === name ? "bg-siam-600 text-white" : "border border-slate-200 bg-white text-slate-600"}`}>
-            {name}
+        {categories.map(([name, Icon]: any) => (
+          <button key={name} onClick={() => setCategory(name)} className={`inline-flex min-h-10 items-center gap-2 whitespace-nowrap rounded-2xl px-3.5 text-xs font-black transition ${category === name ? "bg-siam-600 text-white" : "border surface text-muted"}`}>
+            <Icon size={15}/>{name}
           </button>
         ))}
       </div>
-      {filtered.length ? <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{filtered.map((game) => <GameCard key={game.id} game={game} />)}</div> : <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">ไม่พบเกมที่ค้นหา</div>}
+
+      {filtered.length ? (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {filtered.map((game) => <GameCard key={game.id} game={game} compact />)}
+        </div>
+      ) : (
+        <div className="rounded-[1.6rem] border border-dashed p-10 text-center surface">
+          <p className="font-black text-main">ไม่เจอเกมนี้</p>
+          <p className="mt-2 text-sm text-muted">ลองค้นหาด้วยคำอื่นดู</p>
+        </div>
+      )}
     </div>
   );
 }
