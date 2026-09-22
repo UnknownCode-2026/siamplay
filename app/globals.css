@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --bg: #f6f8fc;
+  --surface: #ffffff;
+  --text: #0b1b3b;
+  --muted: #667085;
+  --border: #e6eaf0;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top right, rgba(31,111,255,.08), transparent 28rem),
+    radial-gradient(circle at left 30%, rgba(244,185,66,.09), transparent 24rem),
+    var(--bg);
+  color: var(--text);
+}
+* { box-sizing: border-box; }
+button, input, a { -webkit-tap-highlight-color: transparent; }
+.safe-bottom { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
